@@ -26,7 +26,10 @@ const optArticleSelector = '.post',
     optTitleSelector = '.post-title',
     optTitleListSelector = '.titles',
     optArticleTagsSelector = '.post-tags .list',
-    optArticleAuthorSelector = '.post-author';
+    optArticleAuthorSelector = '.post-author',
+    optTagsListSelector = '.tags.list',
+    optCloudClassCount = 5, 
+    optCloudClassPrefix = 'tag-size-';
 
 
 function generateTitleLinks(customSelector = '') {
@@ -49,8 +52,32 @@ function generateTitleLinks(customSelector = '') {
 }
 
 generateTitleLinks();  
+function calculateTagsParams(tags) {
+    console.log('tags', tags);
+    const params = {
+        max: 0,
+        min: 999999
+    }
 
+    for(let tag in tags) {
+        console.log(tag + ' is used ' + tags[tag] + ' times');
+
+        params.max = tags[tag] > params.max ? tags[tag] : params.max;
+        params.min = tags[tag] < params.min ? tags[tag] : params.min; 
+    }
+    console.log('params', params);
+    return params;
+}
+
+function calculateTagClass(count, params) {
+    const normalizedCount = count - params.min;
+    const normalizedMax = params.max - params.min;
+    const percentage = normalizedCount /normalizedMax;
+    const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+    return optCloudClassPrefix + classNumber;
+}
 function generateTags() {
+    let allTags = {};
     const allArticles = document.querySelectorAll('article');  
     
     for(let article of allArticles) {
@@ -61,8 +88,23 @@ function generateTags() {
         for(let dataTag of dataTagsTable) {
             const link = '<li><a href="#tag-'+dataTag+'">'+ dataTag +'</a></li> ';
             html += link;
+            if(!allTags[dataTag]){
+                allTags[dataTag] = 1;
+            } else { 
+                allTags[dataTag]++;
+            }
         }
+        const tagList = document.querySelector(optTagsListSelector);
+        //tagList.innerHTML = allTags.join(' ');
         tagsWrapper.innerHTML = html;
+        console.log(allTags);
+        const tagsParams = calculateTagsParams(allTags);
+        console.log('tagsParams:', tagsParams);
+        let allTagsHTML = '';
+        for(let tag in allTags) {
+            allTagsHTML += '<li><a href="#" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' + tag + ' <span>(' + allTags[tag] + ')</span></a></li>';
+        }
+        tagList.innerHTML = allTagsHTML;
     }
 }
 
