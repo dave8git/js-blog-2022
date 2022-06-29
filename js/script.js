@@ -53,19 +53,19 @@ function generateTitleLinks(customSelector = '') {
 
 generateTitleLinks();  
 function calculateTagsParams(tags) {
-    console.log('tags', tags);
+    //console.log('tags', tags);
     const params = {
         max: 0,
         min: 999999
     }
 
     for(let tag in tags) {
-        console.log(tag + ' is used ' + tags[tag] + ' times');
+        //console.log(tag + ' is used ' + tags[tag] + ' times');
 
         params.max = tags[tag] > params.max ? tags[tag] : params.max;
         params.min = tags[tag] < params.min ? tags[tag] : params.min; 
     }
-    console.log('params', params);
+    //console.log('params', params);
     return params;
 }
 
@@ -97,12 +97,13 @@ function generateTags() {
         const tagList = document.querySelector(optTagsListSelector);
         //tagList.innerHTML = allTags.join(' ');
         tagsWrapper.innerHTML = html;
-        console.log(allTags);
+        //console.log(allTags);
         const tagsParams = calculateTagsParams(allTags);
-        console.log('tagsParams:', tagsParams);
+        //console.log('tagsParams:', tagsParams);
         let allTagsHTML = '';
         for(let tag in allTags) {
-            allTagsHTML += '<li><a href="#" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' + tag + ' <span>(' + allTags[tag] + ')</span></a></li>';
+            //console.log(tag);
+            allTagsHTML += '<li><a href="#tag-'+tag+'" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' + tag + ' <span>(' + allTags[tag] + ')</span></a></li>';
         }
         tagList.innerHTML = allTagsHTML;
     }
