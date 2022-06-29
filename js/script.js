@@ -128,13 +128,15 @@ function tagClickHandler(event) {
 }
 
 function addClickListenersToTags() {
+    console.log('działa!');
     const linksTags = document.querySelectorAll('a[href^="#tag-"]');
     for(let linkTag of linksTags) {
+        console.log('działa!');
         linkTag.addEventListener('click', tagClickHandler);
     }
 
 }
-
+addClickListenersToTags();
 function generateAuthors() {
     const allArticles = document.querySelectorAll('article');
     let html = '';
